@@ -11,7 +11,7 @@ TARGET_DIR=hive-testbench
 sudo apt-get install git
 
 if [ ! -d "$TARGET_DIR" ]; then
-	git clone https://github.com/epkalyanr/hive-testbench.git $TARGET_DIR
+	git clone https://github.com/hdinsight/HivePerformanceAutomation.git $TARGET_DIR
 else
 	echo "Test bench already downloaded..."
 fi
