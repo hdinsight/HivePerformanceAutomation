@@ -1,0 +1,3 @@
+target/
+*.sql.log
+derby.log
