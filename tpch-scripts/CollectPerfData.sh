@@ -52,6 +52,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./GetATSDAG.sh $PERFDATA_OUTPUTDIR
 
+cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
+
 echo "Completed Running PerfData Collection Scripts"
 
 zip -r $BENCH_HOME/$BENCHMARK/PerfData.zip $PERFDATA_OUTPUTDIR
