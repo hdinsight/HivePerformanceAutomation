@@ -6,7 +6,7 @@ set hive.exec.max.dynamic.partitions=100000;
 set hive.exec.max.created.files=1000000;
 set hive.exec.parallel=true;
 set hive.exec.reducers.max=${SCALE};
-set hive.stats.autogather=true;
+set hive.stats.autogather=false;
 set hive.optimize.sort.dynamic.partition=true;
 
 set mapred.job.reduce.input.buffer.percent=0.0;

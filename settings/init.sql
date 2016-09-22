@@ -3,7 +3,7 @@ set mapreduce.reduce.speculative=false;
 set hive.auto.convert.join=true;
 set hive.optimize.reducededuplication.min.reducer=1;
 set hive.optimize.mapjoin.mapreduce=true;
-set hive.stats.autogather=true;
+set hive.stats.autogather=false;
 
 set mapred.reduce.parallel.copies=30;
 set mapred.job.shuffle.input.buffer.percent=0.5;

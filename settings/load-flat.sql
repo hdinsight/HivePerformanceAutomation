@@ -10,6 +10,6 @@ set mapreduce.input.fileinputformat.split.maxsize=240000000;
 set mapreduce.input.fileinputformat.split.minsize.per.node=240000000;
 set mapreduce.input.fileinputformat.split.minsize.per.rack=240000000;
 --set hive.exec.parallel=true;
-set hive.stats.autogather=true;
+set hive.stats.autogather=false;
 set hive.support.concurrency=false;
 set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DummyTxnManager;
