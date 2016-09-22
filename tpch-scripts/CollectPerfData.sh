@@ -50,6 +50,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./GetTezApplication.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
 
+./GetATSDAG.sh $PERFDATA_OUTPUTDIR
+
 echo "Completed Running PerfData Collection Scripts"
 
 zip -r $BENCH_HOME/$BENCHMARK/PerfData.zip $PERFDATA_OUTPUTDIR
