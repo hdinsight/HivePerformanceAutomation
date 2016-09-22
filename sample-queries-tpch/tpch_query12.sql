@@ -1,3 +1,4 @@
+set hive.auto.convert.join=false;
 select
 	l_shipmode,
 	sum(case

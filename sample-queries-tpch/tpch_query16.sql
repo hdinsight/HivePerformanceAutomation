@@ -1,3 +1,4 @@
+set hive.auto.convert.join=false;
 select
 	p_brand,
 	p_type,
