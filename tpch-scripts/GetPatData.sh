@@ -29,8 +29,8 @@ pdsh -R ssh -w ^/etc/hadoop/conf/slaves sudo apt-get -y -qq install linux-tools-
 
 if [ ! -d PAT-master ]; then
         echo "Downloading PAT tool"
-        wget https://github.com/intel-hadoop/PAT/archive/master.zip
-        unzip master.zip
+		git clone https://github.com/dharmeshkakadia/PAT-fork.git
+        mv PAT-fork/ PAT-master/
 fi
 
 cat <<EOM >PAT-master/PAT/config
