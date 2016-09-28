@@ -38,3 +38,6 @@ for i in {1..22}
 do
 ./GetPatData.sh $2 ./TpchQueryExecute.sh $1 $i tpch_query_$i
 done
+
+echo "collecting perf data"
+./CollectPerfData.sh $RESULT_DIR
