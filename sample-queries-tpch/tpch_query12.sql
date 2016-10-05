@@ -1,5 +1,5 @@
 set hive.auto.convert.join=false;
-select
+${EXPLAIN} select
 	l_shipmode,
 	sum(case
 		when o_orderpriority = '1-URGENT'

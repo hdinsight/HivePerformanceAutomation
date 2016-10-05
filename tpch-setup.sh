@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 function usage {
 	echo "Usage: tpch-setup.sh scale_factor [temp_directory]"
@@ -46,6 +46,7 @@ if [ $SCALE -eq 1 ]; then
 	exit 1
 fi
 
+STARTTIME1="`date +%s`"
 # Do the actual data load.
 hdfs dfs -mkdir -p ${DIR}
 hdfs dfs -ls ${DIR}/${SCALE}/lineitem > /dev/null
@@ -60,7 +61,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "TPC-H text data generation complete."
 
-STARTTIME="`date +%s`" 
+STARTTIME2="`date +%s`" 
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
 echo "Loading text data into external tables."
 runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
@@ -94,7 +95,8 @@ do
 	i=`expr $i + 1`
 done
 STOPTIME2="`date +%s`"
-hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql --database ${DATABASE};
+ANALYZE_COMMAND="hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql --database ${DATABASE}";
+runcommand "$COMMAND"
 STOPTIME3="`date +%s`"
 
 echo "Data loaded into database ${DATABASE}."
@@ -102,4 +104,7 @@ echo "Data loaded into database ${DATABASE}."
 LOADTIMES_FILE=loadtimes.csv
 touch $LOADTIMES_FILE
 chmod 777 $LOADTIMES_FILE
-echo "${STARTTIME},${STOPTIME1},${STOPTIME2},${STOPTIME3}" >> $LOADTIMES_FILE;
+echo "STARTTIME,DBGEN,EXTERNALTABLELOAD,ORCLOAD,ANALYZETIME"
+echo "${STARTTIME1},${STARTTIME2},${STOPTIME1},${STOPTIME2},${STOPTIME3}" >> $LOADTIMES_FILE;
+
+./tpch-scripts/ValidateDataGen $DATABASE

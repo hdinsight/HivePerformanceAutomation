@@ -1,4 +1,4 @@
-select
+${EXPLAIN} select
 	o_orderpriority,
 	count(*) as order_count
 from

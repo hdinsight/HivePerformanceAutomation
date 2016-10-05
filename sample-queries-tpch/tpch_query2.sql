@@ -1,4 +1,4 @@
-drop view q2_min_ps_supplycost;
+${EXPLAIN} drop view q2_min_ps_supplycost;
 create view q2_min_ps_supplycost as
 select
 	p_partkey as min_p_partkey,

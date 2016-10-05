@@ -1,4 +1,4 @@
-with q17_part as (
+${EXPLAIN} with q17_part as (
   select p_partkey from part where  
   p_brand = 'Brand#23'
   and p_container = 'MED BOX'

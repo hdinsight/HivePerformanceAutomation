@@ -1,4 +1,4 @@
-drop view q18_tmp_cached;
+${EXPLAIN} drop view q18_tmp_cached;
 drop table q18_large_volume_customer_cached;
 
 create view q18_tmp_cached as
