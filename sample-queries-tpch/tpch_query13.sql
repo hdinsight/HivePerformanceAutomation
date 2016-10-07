@@ -1,4 +1,4 @@
-select
+${EXPLAIN} select
 	c_count,
 	count(*) as custdist
 from

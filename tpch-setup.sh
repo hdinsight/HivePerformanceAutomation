@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 function usage {
 	echo "Usage: tpch-setup.sh scale_factor [temp_directory]"
@@ -30,6 +30,7 @@ TABLES="part partsupp supplier customer orders lineitem nation region"
 SCALE=$1
 DIR=$2
 BUCKETS=13
+RUN_ANALYZE=true
 if [ "X$DEBUG_SCRIPT" != "X" ]; then
 	set -x
 fi
@@ -46,6 +47,7 @@ if [ $SCALE -eq 1 ]; then
 	exit 1
 fi
 
+STARTTIME="`date +%s`"
 # Do the actual data load.
 hdfs dfs -mkdir -p ${DIR}
 hdfs dfs -ls ${DIR}/${SCALE}/lineitem > /dev/null
@@ -60,12 +62,12 @@ if [ $? -ne 0 ]; then
 fi
 echo "TPC-H text data generation complete."
 
-STARTTIME="`date +%s`" 
+DATAGENTIME="`date +%s`" 
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
 echo "Loading text data into external tables."
-runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
+#runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
 
-STOPTIME1="`date +%s`" 
+EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
 i=1
 total=8
@@ -86,20 +88,30 @@ do
 	    -d SOURCE=tpch_text_${SCALE} -d BUCKETS=${BUCKETS} \
             -d SCALE=${SCALE} \
 	    -d FILE=orc"
-	runcommand "$COMMAND"
-	if [ $? -ne 0 ]; then
-		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
-		exit 1
-	fi
+#	runcommand "$COMMAND"
+#	if [ $? -ne 0 ]; then
+#		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
+#		exit 1
+#	fi
 	i=`expr $i + 1`
 done
-STOPTIME2="`date +%s`"
-hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql --database ${DATABASE};
-STOPTIME3="`date +%s`"
+
+ORCLOAD="`date +%s`"
+
+ANALYZE_COMMAND="hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql --database ${DATABASE}"
+
+if $RUN_ANALYZE; then
+	echo "Running analyze"
+	runcommand "$ANALYZE_COMMAND"
+fi
+
+ANALYZETIME="`date +%s`"
 
 echo "Data loaded into database ${DATABASE}."
 
 LOADTIMES_FILE=loadtimes.csv
 touch $LOADTIMES_FILE
-chmod 777 $LOADTIMES_FILE
-echo "${STARTTIME},${STOPTIME1},${STOPTIME2},${STOPTIME3}" >> $LOADTIMES_FILE;
+echo "STARTTIME,DATAGENTIME,EXTERNALTABLELOAD,ORCLOAD,ANALYZETIME" > $LOADTIMES_FILE
+echo "${STARTTIME},${DATAGENTIME},${EXTERNALTABLELOAD},${ORCLOAD},${ANALYZETIME}" >> $LOADTIMES_FILE;
+
+./tpch-scripts/ValidateDataGen.sh $DATABASE

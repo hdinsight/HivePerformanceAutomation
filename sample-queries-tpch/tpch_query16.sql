@@ -1,5 +1,5 @@
 set hive.auto.convert.join=false;
-select
+${EXPLAIN} select
 	p_brand,
 	p_type,
 	p_size,

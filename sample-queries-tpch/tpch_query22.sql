@@ -34,7 +34,7 @@ from
 group by
 	o_custkey;
 
-select
+${EXPLAIN} select
 	cntrycode,
 	count(1) as numcust,
 	sum(c_acctbal) as totacctbal

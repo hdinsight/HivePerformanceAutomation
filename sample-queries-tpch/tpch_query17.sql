@@ -19,7 +19,8 @@ q17_price as (
   where
   l_partkey IN (select p_partkey from q17_part)
 )
-select cast(sum(l_extendedprice) / 7.0 as decimal(32,2)) as avg_yearly
+
+${EXPLAIN} select cast(sum(l_extendedprice) / 7.0 as decimal(32,2)) as avg_yearly
 from q17_avg, q17_price
 where 
 t_partkey = l_partkey and l_quantity < t_avg_quantity;

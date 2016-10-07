@@ -1,0 +1,15 @@
+use ${DB};
+
+SELECT COUNT(*) FROM part
+ 	UNION ALL
+SELECT COUNT(*) FROM partsupp
+	UNION ALL
+SELECT COUNT(*) FROM customer
+	UNION ALL
+SELECT COUNT(*) FROM supplier
+	UNION ALL
+SELECT COUNT(*) FROM orders
+	UNION ALL
+SELECT COUNT(*) FROM lineitem;
+
+

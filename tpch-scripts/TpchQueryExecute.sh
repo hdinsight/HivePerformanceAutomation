@@ -4,7 +4,7 @@
 
 if [ $# -ne 2 ]
 then
-	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER"
+	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER"	
 	exit 1
 else
 	SCALE="$1"
@@ -22,9 +22,14 @@ QUERY_DIR=$BENCH_HOME/$BENCHMARK/sample-queries-tpch
 
 RESULT_DIR=$BENCH_HOME/$BENCHMARK/results/
 
+PLAN_DIR=$BENCH_HOME/$BENCHMARK/plans/
+
 if [ ! -d "$RESULT_DIR" ]; then
 mkdir $RESULT_DIR
-chmod -R 777 $RESULT_DIR
+fi
+
+if [ ! -d "$PLAN_DIR" ]; then
+mkdir $PLAN_DIR
 fi
 
 LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
@@ -32,8 +37,7 @@ LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then
 	touch "$LOG_FILE_EXEC_TIMES"
-	chmod 777 $LOG_FILE_EXEC_TIMES
-	echo "QUERY,DURATION_IN_SECONDS,STARTTIME,STOPTIME,BENCHMARK,DATABASE,SCALE_FACTOR,FILE_FORMAT" >> "${LOG_FILE_EXEC_TIMES}"
+	echo "QUERY,DURATION_IN_SECONDS,STARTTIME,STOPTIME,BENCHMARK,DATABASE,SCALE_FACTOR,FILE_FORMAT,STATUS" >> "${LOG_FILE_EXEC_TIMES}"
 fi
 
 if [ ! -w "$LOG_FILE_EXEC_TIMES" ]
@@ -50,7 +54,11 @@ fi
 
 FILE_FORMAT=orc
 TABLES="part partsupp supplier customer orders lineitem nation region"
-
+RETRY_COUNT=1
+RETURN_VAL=1
+EXECUTION_COUNT=0
+STATUS=FAIL
+TIMEOUT="3h"
 #Measure time for query execution
 # Start timer to measure data loading for the file formats
 STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
@@ -59,13 +67,27 @@ STARTTIME="`date +%s`" # seconds since epochstart
 	ENGINE=hive
 	printf -v j "%02d" $2
 	echo "Hive query: ${2}"
-	hive -i ${HIVE_SETTING} --database ${DATABASE} -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
-	# Calculate the time
-	STOPDATE="`date +%Y/%m/%d:%H:%M:%S`"
-	STOPTIME="`date +%s`" # seconds since epoch
-	DIFF_IN_SECONDS="$(($STOPTIME - $STARTTIME))"
-	DIFF_ms="$(($DIFF_IN_SECONDS * 1000))"
-	DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
-	# log the times in load_time.csv file
-	echo "Query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT}" >> ${LOG_FILE_EXEC_TIMES}
+	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
+	do	
 
+		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
+		RETURN_VAL=$?
+		((EXECUTION_COUNT++))
+		
+		echo "Execution count is $EXECUTION_COUNT and return val is $RETURN_VAL"
+
+		if [ $RETURN_VAL = 0 ]
+		then
+			STATUS=SUCCESS
+		fi
+			
+		# Calculate the time
+		STOPDATE="`date +%Y/%m/%d:%H:%M:%S`"
+		STOPTIME="`date +%s`" # seconds since epoch
+		DIFF_IN_SECONDS="$(($STOPTIME - $STARTTIME))"
+		DIFF_ms="$(($DIFF_IN_SECONDS * 1000))"
+		DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
+		# log the times in load_time.csv file
+		echo "Query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
+		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
+	 done

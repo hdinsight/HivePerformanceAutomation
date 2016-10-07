@@ -1,4 +1,4 @@
-SELECT s_name,
+${EXPLAIN} SELECT s_name,
        Count(1) AS numwait
 FROM   (SELECT s_name
         FROM   (SELECT s_name,

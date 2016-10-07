@@ -21,7 +21,7 @@ select
 from
 	q11_part_tmp_cached;
 
-select
+${EXPLAIN} select
 	ps_partkey, part_value as value
 from (
 	select
