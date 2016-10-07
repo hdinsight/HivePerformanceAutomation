@@ -1,4 +1,4 @@
-${EXPLAIN} drop view q11_part_tmp_cached;
+drop view q11_part_tmp_cached;
 drop view q11_sum_tmp_cached;
 
 create view q11_part_tmp_cached as
@@ -21,7 +21,7 @@ select
 from
 	q11_part_tmp_cached;
 
-select
+${EXPLAIN} select
 	ps_partkey, part_value as value
 from (
 	select

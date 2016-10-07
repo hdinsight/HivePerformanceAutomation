@@ -1,4 +1,4 @@
-
+#!/bin/bash
 #home path
 BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../" && pwd );
 BENCHMARK=hive-testbench
@@ -9,7 +9,6 @@ DATABASE=$1
 
 if [ ! -d "$STATS_DIR" ]; then
 mkdir $STATS_DIR
-chmod -R 777 $STATS_DIR
 fi
 
 >${STATS_DIR}/tableinfo_${DATABASE}.txt;

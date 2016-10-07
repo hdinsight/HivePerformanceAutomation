@@ -1,3 +1,4 @@
+#!/bin/bash
 #usage: TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER
 # This script runs the hive queries on the data generated from the tpch suite and reports query execution times
 
@@ -25,12 +26,10 @@ PLAN_DIR=$BENCH_HOME/$BENCHMARK/plans/
 
 if [ ! -d "$RESULT_DIR" ]; then
 mkdir $RESULT_DIR
-chmod -R 777 $RESULT_DIR
 fi
 
 if [ ! -d "$PLAN_DIR" ]; then
 mkdir $PLAN_DIR
-chmod -R 777 $PLAN_DIR
 fi
 
 LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
@@ -38,7 +37,6 @@ LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then
 	touch "$LOG_FILE_EXEC_TIMES"
-	chmod 777 $LOG_FILE_EXEC_TIMES
 	echo "QUERY,DURATION_IN_SECONDS,STARTTIME,STOPTIME,BENCHMARK,DATABASE,SCALE_FACTOR,FILE_FORMAT,STATUS" >> "${LOG_FILE_EXEC_TIMES}"
 fi
 
@@ -60,6 +58,7 @@ RETRY_COUNT=1
 RETURN_VAL=1
 EXECUTION_COUNT=0
 STATUS=FAIL
+TIMEOUT="3h"
 #Measure time for query execution
 # Start timer to measure data loading for the file formats
 STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
@@ -71,7 +70,7 @@ STARTTIME="`date +%s`" # seconds since epochstart
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
 
-		timeout 3h hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
+		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
 		RETURN_VAL=$?
 		((EXECUTION_COUNT++))
 		

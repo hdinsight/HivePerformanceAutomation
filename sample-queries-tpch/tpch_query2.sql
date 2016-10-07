@@ -1,4 +1,4 @@
-${EXPLAIN} drop view q2_min_ps_supplycost;
+drop view q2_min_ps_supplycost;
 create view q2_min_ps_supplycost as
 select
 	p_partkey as min_p_partkey,
@@ -18,7 +18,7 @@ where
 group by
 	p_partkey;
 
-select
+${EXPLAIN} select
 	s_acctbal,
 	s_name,
 	n_name,

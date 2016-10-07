@@ -1,4 +1,3 @@
-${EXPLAIN} -- explain formatted 
 with tmp1 as (
     select p_partkey from part where p_name like 'forest%'
 ),
@@ -30,7 +29,8 @@ where
     and ps_suppkey = l_suppkey
     and ps_availqty > sum_quantity
 )
-select
+
+${EXPLAIN} select
     s_name,
     s_address
 from

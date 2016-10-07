@@ -1,4 +1,4 @@
-${EXPLAIN} drop view q18_tmp_cached;
+drop view q18_tmp_cached;
 drop table q18_large_volume_customer_cached;
 
 create view q18_tmp_cached as
@@ -12,7 +12,7 @@ where
 group by
 	l_orderkey;
 
-create table q18_large_volume_customer_cached as
+${EXPLAIN} create table q18_large_volume_customer_cached as
 select
 	c_name,
 	c_custkey,

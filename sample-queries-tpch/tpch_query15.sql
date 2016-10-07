@@ -1,4 +1,4 @@
-${EXPLAIN} drop view revenue_cached;
+drop view revenue_cached;
 drop view max_revenue_cached;
 
 create view revenue_cached as
@@ -18,7 +18,7 @@ select
 from
 	revenue_cached;
 
-select
+${EXPLAIN} select
 	s_suppkey,
 	s_name,
 	s_address,

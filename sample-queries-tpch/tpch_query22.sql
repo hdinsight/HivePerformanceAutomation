@@ -1,4 +1,4 @@
-${EXPLAIN} drop view q22_customer_tmp_cached;
+drop view q22_customer_tmp_cached;
 drop view q22_customer_tmp1_cached;
 drop view q22_orders_tmp_cached;
 
@@ -34,7 +34,7 @@ from
 group by
 	o_custkey;
 
-select
+${EXPLAIN} select
 	cntrycode,
 	count(1) as numcust,
 	sum(c_acctbal) as totacctbal
