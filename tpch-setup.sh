@@ -65,7 +65,7 @@ echo "TPC-H text data generation complete."
 DATAGENTIME="`date +%s`" 
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
 echo "Loading text data into external tables."
-#runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
+runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
 
 EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
@@ -88,11 +88,11 @@ do
 	    -d SOURCE=tpch_text_${SCALE} -d BUCKETS=${BUCKETS} \
             -d SCALE=${SCALE} \
 	    -d FILE=orc"
-#	runcommand "$COMMAND"
-#	if [ $? -ne 0 ]; then
-#		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
-#		exit 1
-#	fi
+	runcommand "$COMMAND"
+	if [ $? -ne 0 ]; then
+		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
+		exit 1
+	fi
 	i=`expr $i + 1`
 done
 
