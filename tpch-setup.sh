@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 function usage {
 	echo "Usage: tpch-setup.sh scale_factor [temp_directory]"
@@ -53,7 +53,7 @@ hdfs dfs -mkdir -p ${DIR}
 hdfs dfs -ls ${DIR}/${SCALE}/lineitem > /dev/null
 if [ $? -ne 0 ]; then
 	echo "Generating data at scale factor $SCALE."
-	(cd tpch-gen; hadoop jar target/*.jar -d ${DIR}/${SCALE}/ -s ${SCALE})
+	(cd tpch-gen; hadoop jar target/*.jar -D mapreduce.map.memory.mb=8192 -d ${DIR}/${SCALE}/ -s ${SCALE})
 fi
 hdfs dfs -ls ${DIR}/${SCALE}/lineitem > /dev/null
 if [ $? -ne 0 ]; then
@@ -65,7 +65,10 @@ echo "TPC-H text data generation complete."
 DATAGENTIME="`date +%s`" 
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
 echo "Loading text data into external tables."
-runcommand "hive -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql -d DB=tpch_text_${SCALE} -d LOCATION=${DIR}/${SCALE}"
+
+DATABASE=tpch_text_${SCALE}
+CONNECTION_STRING="jdbc:hive2://localhost:10001/$DATABASE;transportMode=http"
+runcommand "beeline -u ${CONNECTION_STRING} -i settings/load-flat.sql -f ddl-tpch/bin_flat/alltables.sql --hivevar DB=tpch_text_${SCALE} --hivevar LOCATION=${DIR}/${SCALE}"
 
 EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
@@ -79,15 +82,16 @@ else
 fi
 
 DATABASE=tpch_${SCHEMA_TYPE}_orc_${SCALE}
+CONNECTION_STRING="jdbc:hive2://localhost:10001/$DATABASE;transportMode=http"
 
 for t in ${TABLES}
 do
 	echo "Optimizing table $t ($i/$total)."
-	COMMAND="hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/${t}.sql \
-	    -d DB=${DATABASE} \
-	    -d SOURCE=tpch_text_${SCALE} -d BUCKETS=${BUCKETS} \
-            -d SCALE=${SCALE} \
-	    -d FILE=orc"
+	COMMAND="beeline -u ${CONNECTION_STRING} -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/${t}.sql \
+	    --hivevar DB=${DATABASE} \
+	    --hivevar SOURCE=tpch_text_${SCALE} --hivevar  BUCKETS=${BUCKETS} \
+            --hivevar SCALE=${SCALE} \
+	    --hivevar FILE=orc"
 	runcommand "$COMMAND"
 	if [ $? -ne 0 ]; then
 		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
@@ -98,7 +102,7 @@ done
 
 ORCLOAD="`date +%s`"
 
-ANALYZE_COMMAND="hive -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql --database ${DATABASE}"
+ANALYZE_COMMAND="beeline -u ${CONNECTION_STRING} -i settings/load-${SCHEMA_TYPE}.sql -f ddl-tpch/bin_${SCHEMA_TYPE}/analyze.sql"
 
 if $RUN_ANALYZE; then
 	echo "Running analyze"

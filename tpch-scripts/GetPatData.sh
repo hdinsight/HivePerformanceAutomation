@@ -38,12 +38,12 @@ ALL_NODES: `cat /etc/hadoop/conf/slaves | tr '\r\n' ' '`
 
 WORKER_SCRIPT_DIR: /tmp/PAT
 WORKER_TMP_DIR: /tmp/PAT_TMP
-CMD_PATH: `readlink -e $2` $3 $4
+CMD_PATH: `readlink -e $2` $3 $4 $5
 SAMPLE_RATE: 1
 INSTRUMENTS: cpustat memstat netstat iostat vmstat jvms perf
 EOM
 
 cd PAT-master/PAT/
-./pat run $5
+./pat run $6
 
 
