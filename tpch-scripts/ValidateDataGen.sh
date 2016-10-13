@@ -13,6 +13,8 @@ fi
 
 >${STATS_DIR}/tableinfo_${DATABASE}.txt;
 
-hive -d DB=${DATABASE} -f gettpchtablecounts.sql > ${STATS_DIR}/tablecounts_${DATABASE}.txt ;
-hive -d DB=${DATABASE} -f gettpchtableinfo.sql >> ${STATS_DIR}/tableinfo_${DATABASE}.txt ;
+CONNECTION_STRING="jdbc:hive2://localhost:10001/${DATABASE};transportMode=http"
+
+beeline -u ${CONNECTION_STRING} --hivevar DB=${DATABASE} -f $BENCH_HOME/$BENCHMARK/tpch-scripts/gettpchtablecounts.sql > ${STATS_DIR}/tablecounts_${DATABASE}.txt ;
+beeline -u ${CONNECTION_STRING} --hivevar DB=${DATABASE} -f $BENCH_HOME/$BENCHMARK/tpch-scripts/ gettpchtableinfo.sql >> ${STATS_DIR}/tableinfo_${DATABASE}.txt ;
 

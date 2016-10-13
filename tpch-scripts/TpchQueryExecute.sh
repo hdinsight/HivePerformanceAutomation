@@ -2,12 +2,19 @@
 #usage: TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER
 # This script runs the hive queries on the data generated from the tpch suite and reports query execution times
 
-if [ $# -ne 2 ]
+if [ $# -lt 2 ]
 then
-	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER"	
+	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER [RUN_ID] [JDBC_CONNECTION_STRING]"	
 	exit 1
 else
 	SCALE="$1"
+fi
+
+if [ -z "$3" ]
+then
+        RUN_ID=1
+else
+        RUN_ID=$3
 fi
 
 # get home path
@@ -20,9 +27,9 @@ HIVE_SETTING=$BENCH_HOME/$BENCHMARK/sample-queries-tpch/testbench.settings
 # Set path to tpc-h queries
 QUERY_DIR=$BENCH_HOME/$BENCHMARK/sample-queries-tpch
 
-RESULT_DIR=$BENCH_HOME/$BENCHMARK/results/
+RESULT_DIR=$BENCH_HOME/$BENCHMARK/results_$RUN_ID/
 
-PLAN_DIR=$BENCH_HOME/$BENCHMARK/plans/
+PLAN_DIR=$BENCH_HOME/$BENCHMARK/plans_$RUN_ID/
 
 if [ ! -d "$RESULT_DIR" ]; then
 mkdir $RESULT_DIR
@@ -32,7 +39,10 @@ if [ ! -d "$PLAN_DIR" ]; then
 mkdir $PLAN_DIR
 fi
 
-LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
+LOG_DIR=$BENCH_HOME/$BENCHMARK/logs_$RUN_ID/
+mkdir $LOG_DIR
+
+LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs_$RUN_ID/query_times.csv"
 
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then
@@ -69,8 +79,14 @@ STARTTIME="`date +%s`" # seconds since epochstart
 	echo "Hive query: ${2}"
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
+		if [ -z $4 ] 
+		then
+			CONNECTION_STRING="jdbc:hive2://localhost:10001/$DATABASE;transportMode=http"
+		else
+			CONNECTION_STRING=$4
+		fi
 
-		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
+		 beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
 		RETURN_VAL=$?
 		((EXECUTION_COUNT++))
 		
@@ -89,5 +105,5 @@ STARTTIME="`date +%s`" # seconds since epochstart
 		DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
 		# log the times in load_time.csv file
 		echo "Query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
-		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
+		beeline -u ${CONNECTION_STRING}  -i ${HIVE_SETTING} --hivevar  EXPLAIN="explain" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
 	 done
