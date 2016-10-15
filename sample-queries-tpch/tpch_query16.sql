@@ -1,4 +1,3 @@
-set hive.auto.convert.join=false;
 ${EXPLAIN} select
 	p_brand,
 	p_type,
