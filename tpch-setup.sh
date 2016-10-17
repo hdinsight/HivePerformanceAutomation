@@ -72,11 +72,7 @@ EXTERNALTABLELOAD="`date +%s`"
 i=1
 total=8
 
-if test $SCALE -lt 1000; then 
-	SCHEMA_TYPE=flat
-else
-	SCHEMA_TYPE=partitioned
-fi
+SCHEMA_TYPE=partitioned
 
 DATABASE=tpch_${SCHEMA_TYPE}_orc_${SCALE}
 
