@@ -37,8 +37,12 @@ echo "SERVER is set to $SERVER"
 echo "Running Scripts for Perf Data Collection ..."
 
 mkdir $PERFDATA_OUTPUTDIR
-		
+
+./GetHiveQueryIds.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
+ 
 ./GetATSDAG.sh $PERFDATA_OUTPUTDIR
+
+cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
 
 echo "Completed Running PerfData Collection Scripts"
 
