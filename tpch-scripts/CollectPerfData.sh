@@ -44,6 +44,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./GetATSDAG.sh $PERFDATA_OUTPUTDIR
 
+QUERY_TIMES_FILE=${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv
+
 cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
 
 echo "Completed Running PerfData Collection Scripts"
