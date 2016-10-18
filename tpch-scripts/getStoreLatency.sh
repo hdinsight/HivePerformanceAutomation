@@ -3,6 +3,12 @@ if [ ! -d "azlogs" ]; then
         $BENCH_HOME/$BENCHMARK/apache-maven-3.0.5/bin/mvn package assembly:single -f azlogs/pom.xml;
 fi
 
+which csvsql > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+	echo "Installing CSVKIT" 
+	sudo pip install csvkit
+fi
+
 echo "query,operation_type,request_status,count,size,E2E_avg,E2E99th,E2E999th,E2E999th,E2E_min,E2E_max,E2E_server_avg,E2E_server_min,E2E_server_max" > latency_report.csv ;
 
 while read start <&3 && read end <&4 && read query <&5 ; do
