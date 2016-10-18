@@ -46,6 +46,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./getStoreLatency.sh ${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv
 
+./getTaskNodeAssignment.sh $PERFDATA_OUTPUTDIR
+
 cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
 
 echo "Completed Running PerfData Collection Scripts"
