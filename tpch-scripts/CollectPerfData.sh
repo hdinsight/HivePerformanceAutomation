@@ -1,8 +1,8 @@
 #!/bin/bash
-BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd );
+export BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd );
 echo "\$BENCH_HOME is set to $BENCH_HOME";
 
-BENCHMARK=hive-testbench
+export BENCHMARK=hive-testbench
 
 if [ $# -eq 0 ]
 then
@@ -43,6 +43,8 @@ mkdir $PERFDATA_OUTPUTDIR
 ./GetTezDags.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
 
 ./GetATSDAG.sh $PERFDATA_OUTPUTDIR
+
+./getStoreLatency.sh ${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv
 
 cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
 
