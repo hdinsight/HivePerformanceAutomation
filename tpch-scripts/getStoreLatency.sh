@@ -1,3 +1,8 @@
+if [ ! -d "azlogs" ]; then
+	git clone https://github.com/dharmeshkakadia/azlogs ;
+        $BENCH_HOME/$BENCHMARK/apache-maven-3.0.5/bin/mvn package assembly:single -f azlogs/pom.xml;
+fi
+
 echo "query,operation_type,request_status,count,size,E2E_avg,E2E99th,E2E999th,E2E999th,E2E_min,E2E_max,E2E_server_avg,E2E_server_min,E2E_server_max" > latency_report.csv ;
 
 while read start <&3 && read end <&4 && read query <&5 ; do
@@ -7,11 +12,7 @@ while read start <&3 && read end <&4 && read query <&5 ; do
 
 	echo "Processing $query" ;
 
-	java -jar ../azlogs.jar $(grep -o "fs.azure.account.key\\..*blob.core.windows.net" /etc/hadoop/conf/core-site.xml | sed 's/fs.azure.account.key.//g' | sed 's/.blob.core.windows.net//g') $(/usr/lib/python2.7/dist-packages/hdinsight_common/decrypt.sh $(grep -n2 "fs.azure.account.key\\." /etc/hadoop/conf/core-site.xml | grep -o "<value>.*/value>" | sed 's:<value>::g' | sed 's:</value>::g')) "$start" "$end" "" 2> /dev/null |
-
-	sed '1d' |
-
-	{ echo "version_number;request_start_time;operation_type;request_status;http_status_code;end_to_end_latency_in_ms;server_latency_in_ms;authentication_type;requester_account_name;owner_account_name;service_type;request_url;requested_object_key;request_id_header;operation_count;requester_ip_address;request_version_header;request_header_size;request_packet_size;response_header_size;response_packet_size;request_content_length;request_md5;server_md5;etag_identifier;last_modified_time;conditions_used;user_agent_header;referrer_header;client_request_id"; cat - ; } |
+	java -jar azlogs/target/azlogs.jar $(grep -o "fs.azure.account.key\\..*blob.core.windows.net" /etc/hadoop/conf/core-site.xml | sed 's/fs.azure.account.key.//g' | sed 's/.blob.core.windows.net//g') $(/usr/lib/python2.7/dist-packages/hdinsight_common/decrypt.sh $(grep -n2 "fs.azure.account.key\\." /etc/hadoop/conf/core-site.xml | grep -o "<value>.*/value>" | sed 's:<value>::g' | sed 's:</value>::g')) "$start" "$end" "" 2> /dev/null |
 
 	sudo csvcut -d ";" -c operation_type,request_status,end_to_end_latency_in_ms,server_latency_in_ms,response_packet_size > temp.csv ;
 
