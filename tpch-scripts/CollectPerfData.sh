@@ -1,8 +1,8 @@
 #!/bin/bash
-BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd );
+export BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd );
 echo "\$BENCH_HOME is set to $BENCH_HOME";
 
-BENCHMARK=hive-testbench
+export BENCHMARK=hive-testbench
 
 if [ $# -eq 0 ]
 then
