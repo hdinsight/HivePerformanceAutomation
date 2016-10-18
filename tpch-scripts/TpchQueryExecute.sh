@@ -69,6 +69,7 @@ STARTTIME="`date +%s`" # seconds since epochstart
 	echo "Hive query: ${2}"
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
+		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
 
 		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
 		RETURN_VAL=$?
@@ -89,5 +90,4 @@ STARTTIME="`date +%s`" # seconds since epochstart
 		DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
 		# log the times in load_time.csv file
 		echo "Query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
-		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
 	 done
