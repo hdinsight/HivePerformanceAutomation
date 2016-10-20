@@ -109,7 +109,8 @@
                 "scriptActions": [
                   {
                     "name": "TPCH Benchmark",
-                    "uri": "https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/azure/perf_installer.sh"
+                    "uri": "https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/azure/perf_installer.sh",
+                    "parameters": "/home/[parameters('loginUsername')]"
                   }
                 ]
               },
