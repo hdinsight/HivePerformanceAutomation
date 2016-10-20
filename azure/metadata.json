@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "HivePerformanceAutomation",
+  "description": "Creates an HDInsight linux cluster for performance benchmarking",
+  "githubUsername": "dharmeshkakadia",
+  "summary": "Creates an HDInsight cluster running TPCH",
+  "dateUpdated": "2016-10-14"
+}
