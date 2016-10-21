@@ -30,5 +30,5 @@ echo "Running TPCH Queries and Collecting PAT Data"
 
 ./RunQueriesAndCollectPATData.sh $1 $2
 
-echo "collecting perf data"
-./CollectPerfData.sh
+echo "collecting perf data in the background"
+./CollectPerfData.sh > ../CollectPerfData.log 2>&1 &
