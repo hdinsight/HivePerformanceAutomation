@@ -6,9 +6,11 @@ then
 	exit 1
 fi
 
+STARTTIME="`date +%s`"
+
 if [ -z "$3" ]
 then
-	RUN_ID=1
+	RUN_ID=$STARTTIME
 else
 	RUN_ID=$3
 fi
@@ -22,6 +24,7 @@ RESULT_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/results/
 
 mkdir $BENCH_HOME/$BENCHMARK/run_$RUN_ID/
 mkdir $RESULT_DIR
+#chmod -R 777 $RESULT_DIR
 
 LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
 mkdir $LOG_DIR
@@ -41,7 +44,7 @@ if [ ! -w "$LOG_FILE_EXEC_TIMES" ]
     return 1
 fi
 
-for i in {1..22}
+for i in 1
 do
 ./GetPatData.sh $2 ./TpchQueryExecute.sh $1 $i $RUN_ID $RUN_ID/tpch_query_$i 
 done

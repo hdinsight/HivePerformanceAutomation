@@ -6,6 +6,7 @@ fi
 which csvsql > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	echo "Installing CSVKIT" 
+	pip install --upgrade pip
 	sudo pip install csvkit
 fi
 
@@ -33,3 +34,8 @@ while read start <&3 && read end <&4 && read query <&5 ; do
 	sudo csvsql tmp99 tmp999 tmp9999 summary --query "select query,tmp99.operation_type,tmp99.request_status,count,size,E2E_avg,E2E99th,E2E999th,E2E999th,E2E_min,E2E_max,E2E_server_avg,E2E_server_min,E2E_server_max from tmp99,tmp999,tmp9999,summary where tmp99.operation_type=tmp999.operation_type and tmp999.operation_type=tmp9999.operation_type and summary.operation_type=tmp99.operation_type and tmp99.request_status=tmp999.request_status and tmp999.request_status=tmp9999.request_status and tmp99.request_status=summary.request_status" | sed 1d >> latency_report.csv ;
 
 done 3< <(sudo csvcut -c STARTTIME $1) 4< <(sudo csvcut -c STOPTIME $1) 5< <(sudo csvcut -c QUERY $1)
+
+sudo csvsql latency_report.csv --query "select query,sum(count) total_count from latency_report group by Query" > total
+sudo csvsql latency_report.csv total --query "select lt.query query,total_count,count sucessful_count,size/1000000000 size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from latency_report lt, total where total.Query=lt.Query and request_status='Success' and operation_type='GetBlob'" > success 
+sudo csvsql latency_report.csv --query "select query,sum(count) throttelled_count from latency_report where request_status='ThrottlingError' group by query"  > ThrottlingError
+sudo csvsql success ThrottlingError --query "select Success.query,total_count,sucessful_count,IFNULL(throttelled_count,0) throttelled_count, size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from Success left join ThrottlingError on Success.query=ThrottlingError.query" > latency_summary.csv

@@ -47,7 +47,7 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./GetHiveQueryIds.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
 
-./GetTezDags.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
+./GetTezDagsIds.sh $RESULTS_DIR $PERFDATA_OUTPUTDIR $SERVER
 
 ./GetATSDAG.sh $PERFDATA_OUTPUTDIR
 
@@ -57,7 +57,7 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./getCounters.sh $PERFDATA_OUTPUTDIR dag_counters.csv
 
-cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
+cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results/$RUN_ID $PERFDATA_OUTPUTDIR/pat
 
 echo "Completed Running PerfData Collection Scripts"
 

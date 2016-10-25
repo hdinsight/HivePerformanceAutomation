@@ -10,9 +10,11 @@ else
 	SCALE="$1"
 fi
 
+STARTTIME="`date +%s`"
+
 if [ -z "$3" ]
 then
-        RUN_ID=1
+        RUN_ID=$STARTTIME
 else
         RUN_ID=$3
 fi
@@ -40,9 +42,7 @@ mkdir $PLAN_DIR
 fi
 
 LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
-if [ ! -d "$LOG_DIR" ]; then
 mkdir $LOG_DIR
-fi
 
 LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/run_$RUN_ID/logs//query_times.csv"
 
