@@ -6,6 +6,7 @@ fi
 which csvsql > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	echo "Installing CSVKIT" 
+	pip install --upgrade pip
 	sudo pip install csvkit
 fi
 

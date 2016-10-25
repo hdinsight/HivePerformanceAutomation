@@ -2,12 +2,21 @@
 #usage: TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER
 # This script runs the hive queries on the data generated from the tpch suite and reports query execution times
 
-if [ $# -ne 2 ]
+if [ $# -lt 2 ]
 then
-	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER"	
+	echo "Usage: ./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER [RUN_ID]"	
 	exit 1
 else
 	SCALE="$1"
+fi
+
+STARTTIME="`date +%s`"
+
+if [ -z "$3" ]
+then
+        RUN_ID=$STARTTIME
+else
+        RUN_ID=$3
 fi
 
 # get home path
@@ -20,9 +29,9 @@ HIVE_SETTING=$BENCH_HOME/$BENCHMARK/sample-queries-tpch/testbench.settings
 # Set path to tpc-h queries
 QUERY_DIR=$BENCH_HOME/$BENCHMARK/sample-queries-tpch
 
-RESULT_DIR=$BENCH_HOME/$BENCHMARK/results/
+RESULT_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/results/
 
-PLAN_DIR=$BENCH_HOME/$BENCHMARK/plans/
+PLAN_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/plans/
 
 if [ ! -d "$RESULT_DIR" ]; then
 mkdir $RESULT_DIR
@@ -32,7 +41,10 @@ if [ ! -d "$PLAN_DIR" ]; then
 mkdir $PLAN_DIR
 fi
 
-LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/logs/query_times.csv"
+LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
+mkdir $LOG_DIR
+
+LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/run_$RUN_ID/logs//query_times.csv"
 
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then

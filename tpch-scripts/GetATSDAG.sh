@@ -23,5 +23,6 @@ while read -r line
 do
         echo "Getting history zip data for $line"
 		read -a linearray <<< $line
-		hadoop jar /usr/hdp/current/tez-client/tez-history-parser*.jar org.apache.tez.history.ATSImportTool -dagId ${linearray[0]}  --downloadDir $PERFDATA_OUTPUTDIR/${linearray[1]}
+		hadoop jar /usr/hdp/current/tez-client/tez-history-parser*.jar org.apache.tez.history.ATSImportTool -dagId ${linearray[0]}  --downloadDir $PERFDATA_OUTPUTDIR/ATSDATA/${linearray[1]}
 done <  ${PERFDATA_OUTPUTDIR}/dagids.txt
+
