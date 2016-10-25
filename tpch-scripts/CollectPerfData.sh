@@ -7,12 +7,13 @@ export BENCHMARK=hive-testbench
 if [ $# -eq 0 ]
 then
 	echo "Usage ./CollectPerfData.sh RUN_ID RESULTS_DIR PERFDATA_OUTPUTDIR SERVER"
-	echo "Default Values will be used if you do not provide command line parameters"
+	echo "Default Values will be used if you do not provide command line parameters. RUN_ID is mandatory"
 fi
 
 if [ -z $1 ]
 then
-	RUN_ID=1
+	echo "Please enter RUN_ID"
+	exit 1
 else
 	RUN_ID=$1
 fi
