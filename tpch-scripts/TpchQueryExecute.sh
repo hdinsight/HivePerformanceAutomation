@@ -40,7 +40,9 @@ mkdir $PLAN_DIR
 fi
 
 LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
+if [ ! -d "$LOG_DIR" ]; then
 mkdir $LOG_DIR
+fi
 
 LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/run_$RUN_ID/logs//query_times.csv"
 
