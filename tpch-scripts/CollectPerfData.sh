@@ -48,6 +48,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 ./getTaskNodeAssignment.sh $PERFDATA_OUTPUTDIR node_assignment_report.csv
 
+./getCounters.sh $PERFDATA_OUTPUTDIR dag_counters.csv
+
 cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results $PERFDATA_OUTPUTDIR/pat
 
 echo "Completed Running PerfData Collection Scripts"
