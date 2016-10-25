@@ -1,5 +1,5 @@
 #!/bin/bash
-#usage: TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER
+#usage: TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER [RUN_ID]
 # This script runs the hive queries on the data generated from the tpch suite and reports query execution times
 
 if [ $# -lt 2 ]
@@ -42,9 +42,12 @@ mkdir $PLAN_DIR
 fi
 
 LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
-mkdir $LOG_DIR
 
-LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/run_$RUN_ID/logs//query_times.csv"
+if [ ! -d "$LOG_DIR" ]; then
+mkdir $LOG_DIR
+fi
+
+LOG_FILE_EXEC_TIMES="$LOG_DIR/query_times.csv"
 
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then

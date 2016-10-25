@@ -44,7 +44,7 @@ if [ ! -w "$LOG_FILE_EXEC_TIMES" ]
     return 1
 fi
 
-for i in 1
+for i in {1..22}
 do
 ./GetPatData.sh $2 ./TpchQueryExecute.sh $1 $i $RUN_ID $RUN_ID/tpch_query_$i 
 done
