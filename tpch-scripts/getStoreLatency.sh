@@ -6,6 +6,8 @@ fi
 which csvsql > /dev/null 2>&1
 if [ $? -ne 0 ]; then
 	echo "Installing CSVKIT" 
+	# 3.5 cluster ships with older version of pip which fails the package install
+	pip install --upgrade pip
 	sudo pip install csvkit
 fi
 
