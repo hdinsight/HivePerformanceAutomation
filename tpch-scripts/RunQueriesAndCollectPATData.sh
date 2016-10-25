@@ -1,5 +1,5 @@
 #!/bin/bash
-#Script Usage : ./RunQueriesAndCollectPATData.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD
+#Script Usage : ./RunQueriesAndCollectPATData.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD [RUN_ID]
 if [ $# -lt 2 ]
 then
 	echo "usage:./RunQueriesAndCollectPATData.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD [RUN_ID]"
@@ -30,7 +30,7 @@ LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
 mkdir $LOG_DIR
 
 # Initialize log file for data loading times
-LOG_FILE_EXEC_TIMES="${BENCH_HOME}/${BENCHMARK}/run_$RUN_ID/logs/query_times.csv"
+LOG_FILE_EXEC_TIMES="$LOG_DIR/query_times.csv"
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then
 	touch "$LOG_FILE_EXEC_TIMES"
