@@ -2,6 +2,7 @@
 BENCH_HOME=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../.." && pwd );
 
 BENCHMARK=hive-testbench
+
 if [ $# -eq 0 ]
 then
 	echo "Usage ./GetTezDagIds.sh RESULTS_DIR PERFDATA_OUTPUTDIR SERVER"
@@ -33,14 +34,17 @@ echo "RESULTS_DIR is set to $RESULTS_DIR"
 echo "PERFDATA_OUTPUTDIR is set to $PERFDATA_OUTPUTDIR"
 echo "SERVER is set to $SERVER"
 
-file="$PERFDATA_OUTPUTDIR/qids.txt"
-count=01
-mkdir $PERFDATA_OUTPUTDIR/dags
-rm $PERFDATA_OUTPUTDIR/dags/*
-while read -r line
+mkdir $PERFDATA_OUTPUTDIR
+		
+>$PERFDATA_OUTPUTDIR/dagids.txt
+
+for file in $PERFDATA_OUTPUTDIR/dags/*.txt
 do
-        echo "Getting dag for $line"
-        read -a linearray <<< $line
-        curl  $SERVER/TEZ_DAG_ID?primaryFilter=callerId:${linearray[0]} > $PERFDATA_OUTPUTDIR/dags/dag_${linearray[1]}.txt
-done < $file
+	grep -P -o '"dag_.*?"' "$file" | tr -d '\n' >> $PERFDATA_OUTPUTDIR/dagids.txt
+	filebase=${file##*/}
+	filename=${filebase%.*}
+
+	echo -e "\t$filename" >> $PERFDATA_OUTPUTDIR/dagids.txt
+done
+    sed -i 's/\"//g' $PERFDATA_OUTPUTDIR/dagids.txt
 
