@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-counter=11
+counter=0
 while [ $counter -lt $1 ]; do
 STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
 STARTTIME="`date +%s`"
