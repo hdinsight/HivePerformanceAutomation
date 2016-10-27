@@ -60,6 +60,8 @@ mkdir $PERFDATA_OUTPUTDIR
 
 cp -R $BENCH_HOME/$BENCHMARK/tpch-scripts/PAT-master/PAT/results/$RUN_ID $PERFDATA_OUTPUTDIR/pat
 
+./getPATSummary.sh $PERFDATA_OUTPUTDIR/pat $PERFDATA_OUTPUTDIR 
+
 echo "Completed Running PerfData Collection Scripts"
 
 zip -r $BENCH_HOME/$BENCHMARK/run_$RUN_ID/PerfData.zip $PERFDATA_OUTPUTDIR
