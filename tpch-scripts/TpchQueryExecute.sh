@@ -104,5 +104,5 @@ STARTTIME="`date +%s`" # seconds since epochstart
 		DIFF_ms="$(($DIFF_IN_SECONDS * 1000))"
 		DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
 		# log the times in load_time.csv file
-		echo "Query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
+		echo "query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
 	 done
