@@ -46,7 +46,7 @@ fi
 
 for i in {1..22}
 do
-./GetPatData.sh $2 ./TpchQueryExecute.sh $1 $i $RUN_ID $RUN_ID/tpch_query_$i 
+./GetPatData.sh $2 ./TpchQueryExecute.sh $1 $i $RUN_ID $RUN_ID/tpch_query_$(printf %02d $i) 
 done
 
 echo "collecting perf data"
