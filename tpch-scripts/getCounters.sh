@@ -12,4 +12,4 @@ function getcountervalues {
 while IFS= read -r -d $'\0' file; do
         s=$(echo $file | grep -oP "query[0-9]{2}")
         getcountervalues $file $2
-done < <(find $1 -name *.zip -type f -print0)
+done < <(find $1 -name "*.zip" -type f -print0)
