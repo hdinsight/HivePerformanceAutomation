@@ -36,7 +36,8 @@ while read start <&3 && read end <&4 && read query <&5 ; do
 
 done 3< <(sudo csvcut -c STARTTIME $1) 4< <(sudo csvcut -c STOPTIME $1) 5< <(sudo csvcut -c QUERY $1)
 
-sudo csvsql $2/latency_report.csv --query "select query,sum(count) total_count from latency_report group by Query" > total
-sudo csvsql $2/latency_report.csv total --query "select lt.query query,total_count,count sucessful_count,size/1000000000 size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from latency_report lt, total where total.Query=lt.Query and request_status='Success' and operation_type='GetBlob'" > success 
-sudo csvsql $2/latency_report.csv --query "select query,sum(count) throttelled_count from latency_report where request_status='ThrottlingError' group by query"  > ThrottlingError
-sudo csvsql success ThrottlingError --query "select Success.query,total_count,sucessful_count,IFNULL(throttelled_count,0) throttelled_count, size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from Success left join ThrottlingError on Success.query=ThrottlingError.query" > $2/latency_summary.csv
+sudo csvsql $2/latency_report.csv --query "select query,sum(count) total_requests_count from latency_report group by Query" > total_requests
+sudo csvsql $2/latency_report.csv --query "select query,sum(count) total_getblob_count from latency_report where operation_type='GetBlob' group by Query" > total
+sudo csvsql $2/latency_report.csv total total_requests --query "select lt.query query,total_requests_count,total_getblob_count,sum(count) sucessful_count,size/1000000000 size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from latency_report lt,total,total_requests where lt.query=total.query and lt.query=total_requests.query and request_status='Success' and operation_type='GetBlob' group by lt.query,request_status" > success 
+sudo csvsql $2/latency_report.csv --query "select query,sum(count) throttelled_count from latency_report where request_status='ThrottlingError' and operation_type='GetBlob' group by query"  > ThrottlingError
+sudo csvsql success ThrottlingError --query "select Success.query,total_requests_count,total_getblob_count,sucessful_count,IFNULL(throttelled_count,0) throttelled_count, size_GB,E2E99th,E2E999th,E2E_avg,E2E_max,E2E_server_avg,E2E_server_max from Success left join ThrottlingError on Success.query=ThrottlingError.query" > $2/latency_summary.csv
