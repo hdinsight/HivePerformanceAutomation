@@ -75,7 +75,6 @@ EXECUTION_COUNT=0
 STATUS=FAIL
 TIMEOUT="3h"
 #Measure time for query execution
-# Start timer to measure data loading for the file formats
 STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
 STARTTIME="`date +%s`" # seconds since epochstart
 # Execute query
@@ -85,6 +84,10 @@ STARTTIME="`date +%s`" # seconds since epochstart
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
 		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
+		
+		#Measure time for query execution
+		STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
+		STARTTIME="`date +%s`" # seconds since epochstart
 
 		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
 		RETURN_VAL=$?
