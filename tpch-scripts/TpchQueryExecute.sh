@@ -74,9 +74,7 @@ RETURN_VAL=1
 EXECUTION_COUNT=0
 STATUS=FAIL
 TIMEOUT="3h"
-#Measure time for query execution
-STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
-STARTTIME="`date +%s`" # seconds since epochstart
+
 # Execute query
 	ENGINE=hive
 	printf -v j "%02d" $2
@@ -86,7 +84,6 @@ STARTTIME="`date +%s`" # seconds since epochstart
 		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
 		
 		#Measure time for query execution
-		STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
 		STARTTIME="`date +%s`" # seconds since epochstart
 
 		timeout ${TIMEOUT} hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="" -f ${QUERY_DIR}/tpch_query${2}.sql > ${RESULT_DIR}/${DATABASE}_query${j}.txt 2>&1
@@ -101,7 +98,6 @@ STARTTIME="`date +%s`" # seconds since epochstart
 		fi
 			
 		# Calculate the time
-		STOPDATE="`date +%Y/%m/%d:%H:%M:%S`"
 		STOPTIME="`date +%s`" # seconds since epoch
 		DIFF_IN_SECONDS="$(($STOPTIME - $STARTTIME))"
 		DIFF_ms="$(($DIFF_IN_SECONDS * 1000))"
