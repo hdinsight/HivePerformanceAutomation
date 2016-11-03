@@ -48,11 +48,18 @@ mkdir $LOG_DIR
 fi
 
 LOG_FILE_EXEC_TIMES="$LOG_DIR/query_times.csv"
+EXPLAIN_FILE_EXEC_TIMES="$PLAN_DIR/explain_times.csv"
 
 if [ ! -e "$LOG_FILE_EXEC_TIMES" ]
   then
 	touch "$LOG_FILE_EXEC_TIMES"
 	echo "QUERY,DURATION_IN_SECONDS,STARTTIME,STOPTIME,BENCHMARK,DATABASE,SCALE_FACTOR,FILE_FORMAT,STATUS" >> "${LOG_FILE_EXEC_TIMES}"
+fi
+
+if [ ! -e "$EXPLAIN_FILE_EXEC_TIMES" ]
+  then
+	touch "$EXPLAIN_FILE_EXEC_TIMES"
+	echo "QUERY,DURATION_IN_SECONDS,STARTTIME,STOPTIME,BENCHMARK,DATABASE,SCALE_FACTOR,FILE_FORMAT" >> "${EXPLAIN_FILE_EXEC_TIMES}"
 fi
 
 if [ ! -w "$LOG_FILE_EXEC_TIMES" ]
@@ -81,8 +88,9 @@ TIMEOUT="3h"
 	echo "Hive query: ${2}"
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
+		EXPLAIN_STARTTIME="`date +%s`"
 		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
-		
+		EXPLAIN_ENDTIME="`date +%s`"
 		#Measure time for query execution
 		STARTTIME="`date +%s`" # seconds since epochstart
 
@@ -99,9 +107,12 @@ TIMEOUT="3h"
 			
 		# Calculate the time
 		STOPTIME="`date +%s`" # seconds since epoch
+		EXPLAIN_DIFF_IN_SECONDS="$(($EXPLAIN_ENDTIME - $EXPLAIN_STARTTIME))"
 		DIFF_IN_SECONDS="$(($STOPTIME - $STARTTIME))"
 		DIFF_ms="$(($DIFF_IN_SECONDS * 1000))"
 		DURATION="$(($DIFF_IN_SECONDS / 3600 ))h $((($DIFF_IN_SECONDS % 3600) / 60))m $(($DIFF_IN_SECONDS % 60))s"
-		# log the times in load_time.csv file
+		# log the times in query_times.csv file
 		echo "query${j},${DIFF_IN_SECONDS},${STARTTIME},${STOPTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT},${STATUS}" >> ${LOG_FILE_EXEC_TIMES}
+		# log the explain times in explain_times.csv file
+		echo "query${j},${EXPLAIN_DIFF_IN_SECONDS},${EXPLAIN_STARTTIME},${EXPLAIN_ENDTIME},${BENCHMARK},${DATABASE},${SCALE},${FILE_FORMAT}" >> ${EXPLAIN_FILE_EXEC_TIMES}
 	 done
