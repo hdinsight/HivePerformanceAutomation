@@ -33,15 +33,16 @@ RESULT_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/results/
 
 PLAN_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/plans/
 
+LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
+
 if [ ! -d "$RESULT_DIR" ]; then
+mkdir $BENCH_HOME/$BENCHMARK/run_$RUN_ID/
 mkdir $RESULT_DIR
 fi
 
 if [ ! -d "$PLAN_DIR" ]; then
 mkdir $PLAN_DIR
 fi
-
-LOG_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/logs/
 
 if [ ! -d "$LOG_DIR" ]; then
 mkdir $LOG_DIR
