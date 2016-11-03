@@ -3,7 +3,7 @@
 
 if [ $# -ne 4 ]
 then
-	echo "Usage ./RunQueryLoop QUERY_NUMBER REPEAT_COUNT SCALCE_FACTOR CLUSTER_SSH_PASSWORD"
+	echo "Usage ./RunSingleQueryLoop QUERY_NUMBER REPEAT_COUNT SCALCE_FACTOR CLUSTER_SSH_PASSWORD"
 	exit 1
 fi
 
@@ -13,5 +13,5 @@ STARTDATE="`date +%Y/%m/%d:%H:%M:%S`"
 STARTTIME="`date +%s`"
 let counter=counter+1
 echo "Running Iteration $counter"
-./GetPatData.sh $4 ./TpchSingleQueryExecute.sh $3 $1 tpch_query_$1_$STARTTIME
+./GetPatData.sh $4 ./TpchQueryExecute.sh $3 $1 $counter $counter/tpch_query_$(printf %02d $1) 
 done
