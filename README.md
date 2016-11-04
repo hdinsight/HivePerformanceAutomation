@@ -10,7 +10,7 @@ Kickoff
 =======
 You can kickoff the 10 iterations of 1 TB run with
 
-``curl https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/tpch-scripts/RunTpch.sh | bash 1000 PASSWORD 10 ``
+``curl https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/tpch-scripts/RunTpch.sh | bash -s -- 1000 PASSWORD 10 ``
 
 Overview
 ========
