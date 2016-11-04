@@ -6,6 +6,11 @@ A testbench for experimenting with Apache Hive at any data scale. You can deploy
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
+Kickoff
+=======
+You can kickoff the 10 iterations of 1 TB run with
+
+``curl https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/tpch-scripts/RunTpch.sh | bash 1000 PASSWORD 10 ``
 
 Overview
 ========

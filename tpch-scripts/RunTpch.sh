@@ -1,9 +1,9 @@
 #!/bin/bash
-#Script Usage : ./RunTpch.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD
+#Script Usage : ./RunTpch.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD [REPEAT_COUNT]
 
-if [ $# -ne 2 ]
+if [ $# -lt 2 ]
 then
-	echo "Usage: ./RunTPCH SCALE_FACTOR CLUSTER_SSH_PASSWORD"
+	echo "Usage: ./RunTPCH SCALE_FACTOR CLUSTER_SSH_PASSWORD [REPEAT_COUNT]"
 	exit 1
 fi
 
@@ -28,7 +28,8 @@ cd ./tpch-scripts
 
 echo "Running TPCH Queries and Collecting PAT Data"
 
-./RunQueriesAndCollectPATData.sh $1 $2
-
-echo "collecting perf data"
-./CollectPerfData.sh
+if [ -z "$3" ]; then
+	./RunSuiteLoop.sh $3 $1 $2
+else
+	./RunSuiteLoop.sh 1 $1 $2
+fi
