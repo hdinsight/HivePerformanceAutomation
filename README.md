@@ -8,9 +8,33 @@ A testbench for experimenting with Apache Hive at any data scale. You can deploy
 
 Kickoff
 =======
-You can kickoff the 10 iterations of 1 TB run with
+* You can kickoff the 10 iterations of 1 TB run with
 
 ``curl https://raw.githubusercontent.com/hdinsight/HivePerformanceAutomation/master/tpch-scripts/RunTpch.sh | bash -s -- 1000 PASSWORD 10 ``
+
+* You can run one iteration of the suite from the headnode of your cluster by running the following command from hive-testbench/tpch-scripts
+
+``./RunQueriesAndCollectPATData.sh SCALE_FACTOR CLUSTER_SSH_PASSWORD [RUN_ID]``
+RUN_ID is an optional argument. All the data for a run is collected under the hive-testbench/run_$RUN_ID folder. If the RUN_ID is not supplied then the current timestamp is used as the runId.
+
+* You can run multiple iterations of the suite from the headnode of your cluster the following command from hive-testbench/tpch-scripts
+
+``./RunSuiteLoop REPEAT_COUNT SCALE_FACTOR CLUSTER_SSH_PASSWORD``
+for ex: ./RunSuiteLoop 10 1000 H@doop1234
+would run 10 iterations of the TPCH suite for a scale factor of 1000 (1GB)
+
+* You can Run a Single Query from the headnode of your cluster by running the following command from hive-testbench/tpch-scripts
+
+``./TpchQueryExecute.sh SCALE_FACTOR QUERY_NUMBER [RUN_ID]``
+
+* You can run multiple iterations of a single query by running the following command from hive-testbench/tpch-scripts
+
+``./RunSingleQueryLoop QUERY_NUMBER REPEAT_COUNT SCALCE_FACTOR CLUSTER_SSH_PASSWORD``
+
+* you can run the following script from hive-testbench/tpch-scripts to get the perf data collected for a run 
+
+ ``./CollectPerfData.sh RUN_ID [RESULTS_DIR] [PERFDATA_OUTPUTDIR] [SERVER]``
+RUN_ID is the id of the run for which you want to collect perfdata
 
 Overview
 ========
