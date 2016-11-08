@@ -14,4 +14,11 @@ STARTTIME="`date +%s`"
 let counter=counter+1
 echo "Running Iteration $counter"
 ./GetPatData.sh $4 ./TpchQueryExecute.sh $3 $1 $counter $counter/tpch_query_$(printf %02d $1) 
+
+RUN_ID=$counter
+RESULT_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/results/
+
+echo "collecting perf data"
+./CollectPerfData.sh $RUN_ID $RESULT_DIR
+
 done

@@ -19,9 +19,14 @@ let counter=counter+1
 echo "Running Iteration $counter"
 RUN_ID=$counter
 mkdir $BENCH_HOME/$BENCHMARK/run_$RUN_ID/
+RESULT_DIR=$BENCH_HOME/$BENCHMARK/run_$RUN_ID/results/
 
 for i in {1..22}
 do
 ./GetPatData.sh $3 ./TpchQueryExecute.sh $2 $i $RUN_ID $RUN_ID/tpch_query_$i
 done
+
+echo "collecting perf data"
+./CollectPerfData.sh $RUN_ID $RESULT_DIR
+
 done
