@@ -15,5 +15,5 @@ fi
 >${STATS_DIR}/tableinfo_${DATABASE}.txt;
 
 hive -d DB=${DATABASE} -f ${SOURCE_DIR}/gettpchtablecounts.sql > ${STATS_DIR}/tablecounts_${DATABASE}.txt ;
-hive -d DB=${DATABASE} -f ${SOURCE_DIR}/gettpchtableinfo.sql >> ${STATS_DIR}/tableinfo_${DATABASE}.txt ;
+hive -d DB=${DATABASE} -f ${SOURCE_DIR}/gettpchtableinfo.sql > ${STATS_DIR}/tableinfo_${DATABASE}.txt ;
 
