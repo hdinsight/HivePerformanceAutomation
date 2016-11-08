@@ -5,6 +5,6 @@ describe extended customer;
 describe extended supplier;
 describe extended nation;
 describe extended region;
-describe exended orders;
+describe extended orders;
 describe extended lineitem;
 
