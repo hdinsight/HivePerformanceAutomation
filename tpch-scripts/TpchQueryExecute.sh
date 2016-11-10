@@ -90,7 +90,7 @@ TIMEOUT="3h"
 	while [ $RETURN_VAL -ne 0 -a $EXECUTION_COUNT -lt $RETRY_COUNT ]
 	do	
 		EXPLAIN_STARTTIME="`date +%s`"
-		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.txt 2>&1
+		hive -i ${HIVE_SETTING} --database ${DATABASE} -d EXPLAIN="explain formatted" -f ${QUERY_DIR}/tpch_query${2}.sql > ${PLAN_DIR}/plan_${DATABASE}_query${j}.json 2>> ${PLAN_DIR}/debug.log
 		EXPLAIN_ENDTIME="`date +%s`"
 		#Measure time for query execution
 		STARTTIME="`date +%s`" # seconds since epochstart
