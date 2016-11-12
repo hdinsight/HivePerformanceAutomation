@@ -11,7 +11,7 @@ if [ $? -ne 0 ]; then
 	sudo pip install csvkit
 fi
 
-echo "query,operation_type,request_status,count,size,E2E_avg,E2E99th,E2E999th,E2E999th,E2E_min,E2E_max,E2E_server_avg,E2E_server_min,E2E_server_max" > latency_report.csv ;
+echo "query,operation_type,request_status,count,size,E2E_avg,E2E99th,E2E999th,E2E999th,E2E_min,E2E_max,E2E_server_avg,E2E_server_min,E2E_server_max" > $2/latency_report.csv ;
 
 while read start <&3 && read end <&4 && read query <&5 ; do
 	if [[ "$query" = "QUERY" ]] ; then
