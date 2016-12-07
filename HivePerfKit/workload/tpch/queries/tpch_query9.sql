@@ -1,4 +1,4 @@
-${EXPLAIN} select
+ select
 	nation,
 	o_year,
 	sum(amount) as sum_profit

@@ -1,4 +1,4 @@
-${EXPLAIN} select
+ select
 	o_year,
 	sum(case
 		when nation = 'PERU' then volume

@@ -30,7 +30,7 @@ where
     and ps_availqty > sum_quantity
 )
 
-${EXPLAIN} select
+ select
     s_name,
     s_address
 from

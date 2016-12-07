@@ -27,7 +27,7 @@ then
     then
         FILENAME_EXTENSION=_$PLANSTARTTIME
     fi
-    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar EXPLAIN="" --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.txt 2>&1
+    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.txt 2>&1
     RETURN_VAL=$?
     PLANENDTIME="`date +%s`"
 
@@ -43,7 +43,7 @@ echo "$basename,${DIFF_IN_SECONDS},${PLANSTARTTIME},${PLANENDTIME},${WORKLOAD},$
 fi
 
 QUERYSTARTTIME="`date +%s`"
-beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar EXPLAIN="" --hivevar DB=${DATABASE} -f $FILE > ${RESULTS_DIR}/${DATABASE}_${basename}${FILENAME_EXTENSION}.txt 2>&1
+beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -f $FILE > ${RESULTS_DIR}/${DATABASE}_${basename}${FILENAME_EXTENSION}.txt 2>&1
 RETURN_VAL=$?
 QUERYENDTIME="`date +%s`"
 

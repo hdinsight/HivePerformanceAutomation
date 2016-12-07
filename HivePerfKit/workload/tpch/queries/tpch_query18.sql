@@ -12,7 +12,7 @@ where
 group by
 	l_orderkey;
 
-${EXPLAIN} create table q18_large_volume_customer_cached as
+ create table q18_large_volume_customer_cached as
 select
 	c_name,
 	c_custkey,

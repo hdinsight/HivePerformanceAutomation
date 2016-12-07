@@ -18,7 +18,7 @@ select
 from
 	revenue_cached;
 
-${EXPLAIN} select
+ select
 	s_suppkey,
 	s_name,
 	s_address,

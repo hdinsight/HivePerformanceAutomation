@@ -18,7 +18,7 @@ where
 group by
 	p_partkey;
 
-${EXPLAIN} select
+ select
 	s_acctbal,
 	s_name,
 	n_name,
