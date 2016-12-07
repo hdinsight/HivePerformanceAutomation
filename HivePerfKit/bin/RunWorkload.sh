@@ -2,7 +2,7 @@
 
 if [ -z $1 ]
 then
-    echo "usage RunQueries.sh WORKLOAD"
+    echo "usage RunWorkload.sh WORKLOAD [REPEAT_COUNT]"
     exit 1
 else
     WORKLOAD_NAME=$1
