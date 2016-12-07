@@ -1,4 +1,3 @@
-
 drop view q2_min_ps_supplycost;
 create view q2_min_ps_supplycost as
 select
@@ -51,4 +50,3 @@ order by
 	s_name,
 	p_partkey
 limit 100;
-
