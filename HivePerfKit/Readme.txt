@@ -2,7 +2,8 @@
 
 This kit can be used to run benchmarks/custom workloads and collect system/hiveapplication data in a fully automated manner
 
-Steps to set up a custom workload:
+== Steps to set up a custom workload ==
+
 Put your workload specific files in the workload/${WORKLOAD_NAME}/ folder
 This folder should contain the following files
 1)setup.sh - install pre-requisites for the workload. for ex: git, maven etc
@@ -54,4 +55,4 @@ The Perfdata contains the following folders
 1)querytimes/ : contains the query execution times
 2)results/ : The beeline logs for the query execution and the resultsets.
 3)plans/ : The query execution plans/
-4) perfdata/ : Contains the PAT data (network,IO,cpu etc), the storage logging data and the ATS DAG data.
+4)perfdata/ : Contains the PAT data (network,IO,cpu etc), the storage logging data and the ATS DAG data.
