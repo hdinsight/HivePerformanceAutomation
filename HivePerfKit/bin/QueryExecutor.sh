@@ -2,7 +2,7 @@
 
 if [ $# -ne 2 ]
 then
-    echo "usage QueryExecutor.sh FULLFILEPATH RUN_ID"
+    echo "usage queryExecutor.sh FULLFILEPATH RUN_ID"
     exit 1
 fi
 
@@ -11,23 +11,23 @@ set -x
 FILE=$1
 RUN_ID=$2
 
-CONNECTION_STRING=$CONNECTION_STRING/$QUERY_DATABASE";transportMode=http"
-DATABASE=$QUERY_DATABASE
+CONNECTION_STRING=${CONNECTION_STRING}/${QUERY_DATABASE}";transportMode=http"
+DATABASE=${QUERY_DATABASE}
 
 name=${FILE##*/}
 basename=${name%.sql}
 basename=${basename%.txt}
 
-if $GENERATE_PLANS;
+if ${GENERATE_PLANS};
 then
 
     querytext=$(cat $FILE | tac | sed '0,/select/s/select/explain select/I' | tac)
     PLANSTARTTIME="`date +%s`"
     if ! [[ $RUN_ID =~  ^[0-9]+$ ]]
     then
-        FILENAME_EXTENSION=_$PLANSTARTTIME
+        FILENAME_EXTENSION=_${PLANSTARTTIME}
     fi
-    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.txt 2>&1
+    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.json 2>&1
     RETURN_VAL=$?
     PLANENDTIME="`date +%s`"
 
@@ -55,5 +55,5 @@ else
 fi
 
 DIFF_IN_SECONDS="$(($QUERYENDTIME- $QUERYSTARTTIME))"
-echo "$basename,${DIFF_IN_SECONDS},${QUERYSTARTTIME},${QUERYENDTIME},${WORKLOAD},${QUERY_DATABASE},${STATUS}" >> ${QUERY_TIMES_FILE}
+echo "${basename},${DIFF_IN_SECONDS},${QUERYSTARTTIME},${QUERYENDTIME},${WORKLOAD},${QUERY_DATABASE},${STATUS}" >> ${QUERY_TIMES_FILE}
 

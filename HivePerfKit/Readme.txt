@@ -1,9 +1,9 @@
-== Hive Perf Automation Kit ==
-
+Hive Perf Automation Kit
+========================
 This kit can be used to run benchmarks/custom workloads and collect system/hiveapplication data in a fully automated manner
 
-== Steps to set up a custom workload ==
-
+Steps to set up a custom workload
+=================================
 Put your workload specific files in the workload/${WORKLOAD_NAME}/ folder
 This folder should contain the following files
 1)setup.sh - install pre-requisites for the workload. for ex: git, maven etc
@@ -14,8 +14,8 @@ This folder should contain the following files
 5)config.sh : Define all the workload specific configs here. for ex: SCALE=1000 (for tpch). The config should definitely define
   QUERY_DATABASE which is the database on which the queries are executed.
 
-== Steps to Run a workload ==
-
+Steps to Run a workload
+========================
 1)Set the parameters in the globalconfig.sh files
 
 The below parameters need to be set appropriately
@@ -44,7 +44,8 @@ REPEAT_COUNT: an optional argument to specify how many times a workload needs to
 	give the full filename along with the extension. for ex:
 	./RunSingleQueryLoop.sh tpch tpch_query1.sql
 
-== Perfdata collection ==
+Perfdata collection
+========================
 
 The perf data output is stored in the following folder
 
