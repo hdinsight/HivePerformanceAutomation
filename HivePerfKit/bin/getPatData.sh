@@ -17,22 +17,6 @@ fi
 
 set -x
 
-for slave in `cat /etc/hadoop/conf/slaves`
-do
-        #echo "ssh-copy-id on $slave"
-        sshpass -p $1 ssh-copy-id -o StrictHostKeyChecking=no ${slave}
-done
-
-pdsh -R ssh -w ^/etc/hadoop/conf/slaves sudo apt-get -y -qq install linux-tools-common sysstat gawk
-
-if [ ! -d ${OUTPUT_PATH}/PAT-master ]; then
-        echo "Downloading PAT tool"
-		git clone https://github.com/dharmeshkakadia/PAT-fork.git
-        mkdir -p ${OUTPUT_PATH}/PAT-master/
-	mv  PAT-fork/* ${OUTPUT_PATH}/PAT-master/
-	sudo rm -r PAT-fork/
-fi
-
 cat <<EOM > ${OUTPUT_PATH}/PAT-master/PAT/config
 ALL_NODES: `cat /etc/hadoop/conf/slaves | tr '\r\n' ' '`
 
