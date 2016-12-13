@@ -22,7 +22,7 @@ COUNTER=0
 while [ ${COUNTER} -lt ${REPEAT_COUNT} ] ;
 do
     let COUNTER=COUNTER+1
-    echo "Running Iteration ${COUNTER}" >> ${BUILD_LOG_FILE}
+    echo "Running Iteration ${COUNTER}" >> ${RUN_LOG_FILE}
 
     STARTTIME="`date +%s`"
 
@@ -35,13 +35,13 @@ do
     
     if [ ! -d ${WORKLOAD_HOME} ]
     then
-        echo "The workload folder $WORKLOAD_HOME does not exist" >> ${BUILD_LOG_FILE}
+        echo "The workload folder $WORKLOAD_HOME does not exist" >> ${RUN_LOG_FILE}
         exit 1
     fi
     
-    echo "WORKLOAD is $WORKLOAD" >> ${BUILD_LOG_FILE}
-    echo "RUN_ID is $RUN_ID" >> ${BUILD_LOG_FILE}
-    echo "RESULT_DIR is $RESULTS_DIR" >> ${BUILD_LOG_FILE}
+    echo "WORKLOAD is $WORKLOAD" >> ${RUN_LOG_FILE}
+    echo "RUN_ID is $RUN_ID" >> ${RUN_LOG_FILE}
+    echo "RESULT_DIR is $RESULTS_DIR" >> ${RUN_LOG_FILE}
     mkdir -p ${RESULTS_DIR}
     mkdir -p ${PLANS_DIR}
     mkdir -p ${QUERY_TIMES_DIR}
@@ -59,15 +59,15 @@ do
 		
 		if ${COLLECT_PATDATA};
 			then
-				./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${BUILD_LOG_FILE}
+				./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${RUN_LOG_FILE}
 			else    
-				./queryExecutor.sh ${file} ${RUN_ID} >> ${BUILD_LOG_FILE}
+				./queryExecutor.sh ${file} ${RUN_ID} >> ${RUN_LOG_FILE}
 		fi
 	done
 		
 	if ${COLLECT_PERFDATA};
 		then
-			${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${BUILD_LOG_FILE}
+			${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${RUN_LOG_FILE}
 		fi
 		
 done

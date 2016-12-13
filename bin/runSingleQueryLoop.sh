@@ -52,15 +52,15 @@ do
     
     if ${COLLECT_PATDATA};
     then
-        ./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${BUILD_LOG_FILE}
+        ./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${RUN_LOG_FILE}
     else
 
-        ./queryExecutor.sh ${file} ${RUN_ID} >> ${BUILD_LOG_DIR}/build.log
+        ./queryExecutor.sh ${file} ${RUN_ID} >> ${RUN_LOG_FILE}
     fi
 done
 
 if ${COLLECT_PERFDATA};
 then
-    ${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${BUILD_LOG_FILE}
+    ${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${RUN_LOG_FILE}
 fi
 

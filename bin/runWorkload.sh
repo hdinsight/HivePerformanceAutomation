@@ -19,8 +19,8 @@ set +a
 
 if [ ${SKIP_PRERUN} !=  true ]
 then
-    ${WORKLOAD_HOME}/setup.sh >> ${BUILD_LOG_FILE}
-    ${WORKLOAD_HOME}/prerun.sh >> ${BUILD_LOG_FILE}
+    ${WORKLOAD_HOME}/setup.sh >> ${RUN_LOG_FILE}
+    ${WORKLOAD_HOME}/prerun.sh >> ${RUN_LOG_FILE}
 fi
 
 ./runQueries.sh ${WORKLOAD_NAME}
