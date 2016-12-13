@@ -35,8 +35,6 @@ echo "RESULT_DIR is $RESULTS_DIR"
 mkdir -p ${RESULTS_DIR}
 mkdir -p ${QUERY_TIMES_DIR}
 touch ${QUERY_TIMES_FILE}
-
-chmod 777 -R ${OUTPUT_DIR}
         
 file=${WORKLOAD_HOME}/queries/${FILENAME}
 
