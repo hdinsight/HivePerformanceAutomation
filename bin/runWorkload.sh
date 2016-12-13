@@ -15,6 +15,8 @@ source ./globalConfig.sh
 source ${WORKLOAD_HOME}/config.sh
 set +a
 
+./setup.sh
+
 if [ ${SKIP_PRERUN} !=  true ]
 then
     ${WORKLOAD_HOME}/setup.sh >> ${BUILD_LOG_FILE}

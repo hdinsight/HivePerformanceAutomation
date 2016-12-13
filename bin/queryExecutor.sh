@@ -27,7 +27,7 @@ then
     then
         FILENAME_EXTENSION=_${PLANSTARTTIME}
     fi
-    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.json 2>&1
+    beeline -u ${CONNECTION_STRING} -i ${HIVE_SETTING} --hivevar DB=${DATABASE} -e "$querytext" > ${PLANS_DIR}/plan_${DATABASE}_${basename}${FILENAME_EXTENSION}.json 2>>${PLANS_DIR}/plan_debug.log
     RETURN_VAL=$?
     PLANENDTIME="`date +%s`"
 
