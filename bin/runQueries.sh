@@ -52,23 +52,23 @@ do
     echo "$EXEC_TIMES_HEADER" > ${PLAN_TIMES_FILE}
 
     for file in ${WORKLOAD_HOME}/queries/*.{sql,hql}
-	do
-		name=${file##*/}
-		basename=${name%.sql}
-		basename=${basename%.hql}
-		
-		if ${COLLECT_PATDATA};
-			then
-				./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${RUN_LOG_FILE}
-			else    
-				./queryExecutor.sh ${file} ${RUN_ID} >> ${RUN_LOG_FILE}
-		fi
-	done
-		
-	if ${COLLECT_PERFDATA};
-		then
-			${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${RUN_LOG_FILE}
-		fi
-		
+    do
+        name=${file##*/}
+        basename=${name%.sql}
+        basename=${basename%.hql}
+        
+        if ${COLLECT_PATDATA};
+            then
+                ./getPatData.sh ${CLUSTER_SSH_PASSWORD} ./queryExecutor.sh ${file} ${RUN_ID} ${WORKLOAD}/run_${RUN_ID}/${basename} >> ${RUN_LOG_FILE}
+            else    
+                ./queryExecutor.sh ${file} ${RUN_ID} >> ${RUN_LOG_FILE}
+        fi
+    done
+        
+    if ${COLLECT_PERFDATA};
+        then
+            ${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${RUN_LOG_FILE}
+        fi
+        
 done
 
