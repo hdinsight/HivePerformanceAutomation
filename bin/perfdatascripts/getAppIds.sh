@@ -31,12 +31,12 @@ mkdir $PERFDATA_OUTPUTDIR
 for file in $RESULTS_DIR/*.txt
 do
 	
-	grep -o "application_.*" "$file" | tr -d '\n' >> $PERFDATA_OUTPUTDIR/qids.txt
+	grep -o "application_.*" "$file" | tr -d '\n' >> $PERFDATA_OUTPUTDIR/appids.txt
 	filebase=${file##*/}
 	filename=${filebase%.*}
 
-	echo -e  "\t$filename" >> $PERFDATA_OUTPUTDIR/qids.txt
+	echo -e  "\t$filename" >> $PERFDATA_OUTPUTDIR/appids.txt
 done
-	sed -i 's/)//g' $PERFDATA_OUTPUTDIR/qids.txt
+	sed -i 's/)//g' $PERFDATA_OUTPUTDIR/appids.txt
 	
 
