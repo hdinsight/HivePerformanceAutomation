@@ -13,6 +13,8 @@ function runcommand {
 	fi
 }
 
+set -x
+. ./config.sh
 cd ${CURRENT_DIRECTORY}
 echo "Building TPC-H Data Generator"
 (cd tpch-gen; make)
@@ -80,7 +82,7 @@ echo "DATAGENTIME,$($DATAGENTIME - $STARTTIME)" >> $LOADTIMES_FILE
 BEELINE_CONNECTION_STRING=$CONNECTION_STRING/$RAWDATA_DATABASE";transportMode=http"
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
 echo "Loading text data into external tables."
-runcommand "beeline -u ${BEELINE_CONNECTION_STRING} -i settings/load-flat.sql -f ddl-tpch/bin_partitioned/allexternaltables.sql --hivevar DB=${RAWDATA_DATABASE} --hivevar LOCATION=${DIR}/${SCALE}"
+runcommand "beeline -u ${BEELINE_CONNECTION_STRING} -i settings/load-flat.sql -f ${CURRENT_DIRECTORY}/ddl-tpch/bin_partitioned/allexternaltables.sql --hivevar DB=${RAWDATA_DATABASE} --hivevar LOCATION=${DIR}/${SCALE}"
 
 EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
@@ -94,7 +96,7 @@ for t in ${TABLES}
 do
 	echo "Optimizing table $t ($i/$total)."
 	TABLELOADSTART="`date +%s`"	
-	COMMAND="beeline -u ${BEELINE_CONNECTION_STRING} -i ddl-tpch/load-partitioned.sql -f ddl-tpch/bin_partitioned/${t}.sql \
+	COMMAND="beeline -u ${BEELINE_CONNECTION_STRING} -i ${CURRENT_DIRECTORY}/ddl-tpch/load-partitioned.sql -f ${CURRENT_DIRECTORY}/ddl-tpch/bin_partitioned/${t}.sql \
 	    --hivevar DB=${QUERY_DATABASE} \
 	    --hivevar SOURCE=${RAWDATA_DATABASE}
             --hivevar SCALE=${SCALE} \
@@ -114,7 +116,7 @@ echo "Data loaded into ${QUERY_DATABASE}"
 
 ORCLOAD="`date +%s`"
 
-ANALYZE_COMMAND="beeline -u ${CONNECTION_STRING} -i settings/load-partitioned.sql -f ddl-tpch/bin_partitioned/${t}.sql \
+ANALYZE_COMMAND="beeline -u ${CONNECTION_STRING} -i${CURRENT_DIRECTORY}/settings/load-partitioned.sql -f ${CURRENT_DIRECTORY}/ddl-tpch/bin_partitioned/${t}.sql \
 	    --hivevar DB=${QUERY_DATABASE} \
 		-f ddl-tpch/bin_partitioned/analyze.sql"
 
