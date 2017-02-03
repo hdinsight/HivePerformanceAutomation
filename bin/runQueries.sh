@@ -67,7 +67,10 @@ do
         
     if ${COLLECT_PERFDATA};
         then
+            curdir=${CURRENT_DIR}
+            cd ${CURRENT_DIR}/perfdatascripts/
             ${CURRENT_DIR}/perfdatascripts/collectPerfData.sh ${RUN_ID} ${RESULTS_DIR} ${PERFDATA_OUTPUTDIR} >> ${RUN_LOG_FILE}
+            cd $curdir
         fi
         
 done
