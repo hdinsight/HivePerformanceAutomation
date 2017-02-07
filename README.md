@@ -24,25 +24,29 @@ CLUSTER_SSH_PASSWORD=H@doop1234
 
 2) If you want to skip any operation like prerun, patdatacollection, perfdatacollection. Set the flags appropriately in the globalconfig.sh files
 
-3) From the bin directory issue the following command:
+3) From the bin directory issue the following command to set execution priviliges on the scripts:
 
-./RunWorkload WORKLOAD_NAME [REPEAT_COUNT]
+chmod o+x *.sh ; chmod o+x perfdatascripts/*.sh
+
+4) Now from the bin directory run the following command to execute the workload:
+
+./runWorkload WORKLOAD_NAME [REPEAT_COUNT]
 
 WORKLOAD_NAME:should match the folder name in the workload folder
 REPEAT_COUNT: an optional argument to specify how many times a workload needs to be executed. Default value is 1.
 
-4) If you want to only run queries and skip the dataload/prerun phase. You can do either of the following
+5) If you want to only run queries and skip the dataload/prerun phase. You can do either of the following
 	a)set the SKIP_PRERUN flag to true in the globalconfig.sh file and run 
-		./RunWorkload WORKLOAD_NAME [REPEAT_COUNT]
+		./runWorkload WORKLOAD_NAME [REPEAT_COUNT]
 		
 		OR
 	
-	b)./RunQueries WORKLOAD_NAME [REPEAT_COUNT]
+	b)./runQueries WORKLOAD_NAME [REPEAT_COUNT]
 	
-5) if you want to execute a single query in a workload n times 
-	./RunSingleQueryLoop.sh WORKLOAD_NAME FILENAME
+6) if you want to execute a single query in a workload n times 
+	./runSingleQueryLoop.sh WORKLOAD_NAME FILENAME
 	give the full filename along with the extension. for ex:
-	./RunSingleQueryLoop.sh tpch tpch_query1.sql
+	./runSingleQueryLoop.sh tpch tpch_query1.sql
 
 Perfdata collection
 ========================
