@@ -77,7 +77,7 @@ fi
 	
 DATAGENTIME="`date +%s`" 
 
-echo "DATAGENTIME,$($DATAGENTIME - $STARTTIME)" >> $LOADTIMES_FILE
+echo "DATAGENTIME,$( expr $DATAGENTIME - $STARTTIME)" >> $LOADTIMES_FILE
 
 BEELINE_CONNECTION_STRING=$CONNECTION_STRING/$RAWDATA_DATABASE";transportMode=http"
 # Create the text/flat tables as external tables. These will be later be converted to ORCFile.
@@ -86,7 +86,7 @@ runcommand "beeline -u ${BEELINE_CONNECTION_STRING} -i settings/load-flat.sql -f
 
 EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
-echo "EXTERNALTABLELOAD,$($EXTERNALTABLELOAD -$DATAGENTIME)" >> $LOADTIMES_FILE
+echo "EXTERNALTABLELOAD,$( expr $EXTERNALTABLELOAD -$DATAGENTIME)" >> $LOADTIMES_FILE
 i=1
 total=8
 
@@ -104,7 +104,7 @@ do
 	runcommand "$COMMAND"
 	TABLELOADEND="`date +%s`"
 
-	echo "TABLELOAD_${t},$($TABLELOADEND - $TABLELOADSTART)" >> $LOADTIMES_FILE
+	echo "TABLELOAD_${t},$( expr $TABLELOADEND - $TABLELOADSTART)" >> $LOADTIMES_FILE
 	if [ $? -ne 0 ]; then
 		echo "Command failed, try 'export DEBUG_SCRIPT=ON' and re-running"
 		exit 1
@@ -127,5 +127,5 @@ fi
 
 ANALYZETIME="`date +%s`"
 
-echo "ANALYZETIME, $($ANALYZETIME - $ORCLOAD)" >> $LOADTIMES_FILE
+echo "ANALYZETIME, $( expr $ANALYZETIME - $ORCLOAD)" >> $LOADTIMES_FILE
 echo "Analyze completed"
