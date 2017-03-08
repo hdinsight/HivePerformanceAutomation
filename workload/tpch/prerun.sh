@@ -116,7 +116,7 @@ echo "Data loaded into ${QUERY_DATABASE}"
 
 ORCLOAD="`date +%s`"
 
-ANALYZE_COMMAND="beeline -u ${CONNECTION_STRING} -i${CURRENT_DIRECTORY}/settings/load-partitioned.sql -f ${CURRENT_DIRECTORY}/ddl-tpch/bin_partitioned/${t}.sql \
+ANALYZE_COMMAND="beeline -u ${BEELINE_CONNECTION_STRING} -i${CURRENT_DIRECTORY}/settings/load-partitioned.sql -f ${CURRENT_DIRECTORY}/ddl-tpch/bin_partitioned/${t}.sql \
 	    --hivevar DB=${QUERY_DATABASE} \
 		-f ddl-tpch/bin_partitioned/analyze.sql"
 
