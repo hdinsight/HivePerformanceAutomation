@@ -1,6 +1,10 @@
 #!/bin/bash
 
 SCALE=1000
+if [ "X$TPCH_SCALE_FACTOR" != "X" ]
+then
+    SCALE=$TPCH_SCALE_FACTOR
+fi
 WORKLOAD=tpch
 WAREHOUSE_DIR=/hive/warehouse
 RAWDATA_DATABASE=tpch_text_${SCALE}
