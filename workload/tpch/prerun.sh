@@ -86,7 +86,7 @@ runcommand "beeline -u ${BEELINE_CONNECTION_STRING} -i settings/load-flat.sql -f
 
 EXTERNALTABLELOAD="`date +%s`" 
 # Create the optimized tables.
-echo "EXTERNALTABLELOAD,$( expr $EXTERNALTABLELOAD -$DATAGENTIME)" >> $LOADTIMES_FILE
+echo "EXTERNALTABLELOAD,$( expr $EXTERNALTABLELOAD - $DATAGENTIME)" >> $LOADTIMES_FILE
 i=1
 total=8
 
