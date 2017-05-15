@@ -22,7 +22,7 @@ echo "TPC-H Data Generator built, you can now use tpch-setup.sh to generate data
 
 if [ ! -f tpch-gen/target/tpch-gen-1.0-SNAPSHOT.jar ]; then
 	echo "Please build the data generator with ./tpch-build.sh first"
-#	exit 1
+	exit 1
 fi
 which hive > /dev/null 2>&1
 if [ $? -ne 0 ]; then
@@ -72,7 +72,7 @@ hdfs dfs -ls ${WAREHOUSE_DIR}/tpch_partitioned_orc_${SCALE}.db > /dev/null
 
 if [ $? -eq 0 ]; then
 	echo "Data already loaded into query tables"
-#	exit 1
+	exit 1
 fi
 	
 DATAGENTIME="`date +%s`" 
